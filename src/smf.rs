@@ -406,7 +406,7 @@ impl<'a> Iterator for TrackIter<'a> {
 /// Allows processing the entire track at once and storing the parsed events into a vector.
 /// Parses events only once, but allocates a "large" amount of memory.
 impl<'a> TrackRepr<'a> for Vec<(&'a [u8], Event<'a>)> {
-    const USE_MULTITHREADING: bool = true;
+    const USE_MULTITHREADING: bool = false;
     fn read(raw: &'a [u8]) -> Result<Self> {
         let mut events = Vec::with_capacity(1024);
         let mut track_iter = TrackIter::read(raw)?;
@@ -430,7 +430,7 @@ impl<'a> TrackRepr<'a> for Vec<(&'a [u8], Event<'a>)> {
 /// Similar to `Vec<(&[u8],Event)>`, but throws away the bytes associated with each event to save
 /// memory.
 impl<'a> TrackRepr<'a> for Vec<Event<'a>> {
-    const USE_MULTITHREADING: bool = true;
+    const USE_MULTITHREADING: bool = false;
     fn read(raw: &'a [u8]) -> Result<Self> {
         let mut events = Vec::with_capacity(1024);
         for ev in TrackIter::read(raw)? {
